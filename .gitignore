@@ -1,0 +1,17 @@
+node_modules/
+schools.db
+management_system.db
+*.db
+*.zip
+*.lnk
+*.url
+*.exe
+*.py
+*.ino
+desktop.ini
+FEATURES.md
+README.md
+check_users.js
+test_chat.js
+sketch_jul16a/
+ss.py

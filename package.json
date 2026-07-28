@@ -1,0 +1,13 @@
+{
+  "name": "rashd",
+  "version": "2.0.0",
+  "description": "رشد — منصة تجمع مدارس الأردن - تعمل محلياً بالكامل بدون إنترنت",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "engines": {
+    "node": ">=22.5.0"
+  },
+  "dependencies": {}
+}

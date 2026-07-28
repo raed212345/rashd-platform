@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>رشد — منصة مدارس الأردن</title>
+<link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+
+<div id="toast" class="toast"></div>
+
+<!-- ===================== شاشة الدخول / التسجيل ===================== -->
+<section id="view-auth" class="auth-screen">
+  <div class="auth-header">
+    <div class="auth-logo">
+      <img src="/logo.png" alt="رشد" onerror="this.style.display='none'">
+    </div>
+    <h1>رشد</h1>
+    <p class="subtitle">منصة تجمع مدارس الأردن — صفوفكم، دردشاتكم، وملفاتكم بمكان واحد</p>
+  </div>
+
+  <div class="role-tabs" id="role-tabs">
+    <button class="role-tab active" data-role="student">🎓 طالب</button>
+    <button class="role-tab" data-role="teacher">📘 معلم</button>
+    <button class="role-tab" data-role="admin">🏫 مدير</button>
+    <button class="role-tab" data-role="developer">🛠️ مطور</button>
+  </div>
+
+  <div class="auth-card">
+    <div class="mode-switch">
+      <button id="mode-login" class="mode-btn active">تسجيل الدخول</button>
+      <button id="mode-register" class="mode-btn">حساب جديد</button>
+    </div>
+
+    <form id="form-login" class="stack">
+      <label>البريد الإلكتروني / اسم الدخول<input type="text" id="login-email" required></label>
+      <label>كلمة المرور<input type="password" id="login-password" required></label>
+      <button type="submit" class="btn-primary">دخول</button>
+    </form>
+
+    <form id="form-register-student" class="stack hidden">
+      <label>المدرسة<select id="s-school" required></select></label>
+      <div class="row">
+        <label>الصف<select id="s-grade" required><option value="">اختر المدرسة أولاً</option></select></label>
+        <label>الشعبة<select id="s-section" required><option value="">اختر الصف أولاً</option></select></label>
+      </div>
+      <label>الاسم الكامل<input type="text" id="s-name" required></label>
+      <div class="row">
+        <label>رقم الهاتف<input type="tel" id="s-phone" required></label>
+        <label>الجنسية<input type="text" id="s-nat" required></label>
+      </div>
+      <label>الرقم الوطني<input type="text" id="s-national-id" placeholder="12345678901" required></label>
+      <label>البريد الإلكتروني<input type="email" id="s-email" required></label>
+      <label>كلمة المرور<input type="password" id="s-password" required></label>
+      <button type="submit" class="btn-primary">إنشاء حساب طالب</button>
+    </form>
+
+    <form id="form-register-teacher" class="stack hidden">
+      <label>كود المعلم (من إدارة المدرسة)<input type="text" id="t-code" required></label>
+      <label>الاسم الكامل<input type="text" id="t-name" required></label>
+      <label>البريد الإلكتروني<input type="email" id="t-email" required></label>
+      <label>كلمة المرور<input type="password" id="t-password" required></label>
+      <div class="sections-builder">
+        <p class="hint">الصفوف والشعب التي تدرّسها:</p>
+        <div id="t-sections-list"></div>
+        <button type="button" id="t-add-section" class="btn-ghost small">+ إضافة صف وشعبة</button>
+      </div>
+      <button type="submit" class="btn-primary">إنشاء حساب معلم</button>
+    </form>
+
+    <form id="form-register-admin" class="stack hidden">
+      <label>كود المدير (من إدارة المدرسة)<input type="text" id="a-code" required></label>
+      <label>الاسم الكامل<input type="text" id="a-name" required></label>
+      <label>البريد الإلكتروني<input type="email" id="a-email" required></label>
+      <label>كلمة المرور<input type="password" id="a-password" required></label>
+      <button type="submit" class="btn-primary">إنشاء حساب مدير</button>
+    </form>
+  </div>
+</section>
+
+<!-- ===================== لوحة الطالب ===================== -->
+<section id="view-student" class="dash hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><img src="/logo.png" alt="" class="sidebar-logo" onerror="this.style.display='none'"> رشد</div>
+    <div class="sidebar-user" id="student-userbox"></div>
+    <nav>
+      <button class="nav-item active" data-tab="class-chat">💬 دردشة الصف</button>
+      <button class="nav-item" data-tab="general-chat">📣 الدردشة العامة</button>
+      <button class="nav-item" data-tab="files">📂 ملفاتي</button>
+      <button class="nav-item" data-tab="timetable">🗓️ جدول الحصص</button>
+      <button class="nav-item" data-tab="notes">📝 ملاحظاتي</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="nav-item" data-tab="settings">⚙️ الإعدادات</button>
+      <button class="btn-logout" id="student-logout">خروج</button>
+    </div>
+  </aside>
+  <main class="content">
+    <div id="student-warnings"></div>
+    <div id="student-class-chat" class="tab-pane"></div>
+    <div id="student-general-chat" class="tab-pane hidden"></div>
+    <div id="student-files" class="tab-pane hidden"></div>
+    <div id="student-timetable" class="tab-pane hidden"></div>
+    <div id="student-notes" class="tab-pane hidden"></div>
+    <div id="student-settings" class="tab-pane hidden"></div>
+  </main>
+</section>
+
+<!-- ===================== لوحة المعلم ===================== -->
+<section id="view-teacher" class="dash hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><img src="/logo.png" alt="" class="sidebar-logo" onerror="this.style.display='none'"> رشد</div>
+    <div class="sidebar-user" id="teacher-userbox"></div>
+    <label class="section-picker-label">الشعبة الحالية
+      <select id="teacher-section-picker"></select>
+    </label>
+    <nav>
+      <button class="nav-item active" data-tab="class-chat">💬 دردشة الصف</button>
+      <button class="nav-item" data-tab="general-chat">📣 الدردشة العامة</button>
+      <button class="nav-item" data-tab="files">📂 الملفات والواجبات</button>
+      <button class="nav-item" data-tab="my-timetable">🗓️ جدولي</button>
+      <button class="nav-item" data-tab="president">🎖️ رئيس الصف</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="nav-item" data-tab="settings">⚙️ الإعدادات</button>
+      <button class="btn-logout" id="teacher-logout">خروج</button>
+    </div>
+  </aside>
+  <main class="content">
+    <div id="teacher-class-chat" class="tab-pane"></div>
+    <div id="teacher-general-chat" class="tab-pane hidden"></div>
+    <div id="teacher-files" class="tab-pane hidden"></div>
+    <div id="teacher-my-timetable" class="tab-pane hidden"></div>
+    <div id="teacher-president" class="tab-pane hidden"></div>
+    <div id="teacher-settings" class="tab-pane hidden"></div>
+  </main>
+</section>
+
+<!-- ===================== لوحة المدير ===================== -->
+<section id="view-admin" class="dash hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><img src="/logo.png" alt="" class="sidebar-logo" onerror="this.style.display='none'"> رشد</div>
+    <div class="sidebar-user" id="admin-userbox"></div>
+    <nav>
+      <button class="nav-item active" data-tab="codes">🔑 أكواد المدرسة</button>
+      <button class="nav-item" data-tab="people">👥 المعلمون والطلاب</button>
+      <button class="nav-item" data-tab="sections">📍 الصفوف والشعب</button>
+      <button class="nav-item" data-tab="log">📋 السجل التأديبي</button>
+      <button class="nav-item" data-tab="reports">📨 البلاغات والشكاوى</button>
+      <button class="nav-item" data-tab="stats">📊 الإحصائيات</button>
+      <button class="nav-item" data-tab="general-chat">📣 الدردشة العامة</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="nav-item" data-tab="settings">⚙️ الإعدادات</button>
+      <button class="btn-logout" id="admin-logout">خروج</button>
+    </div>
+  </aside>
+  <main class="content">
+    <div id="admin-codes" class="tab-pane"></div>
+    <div id="admin-people" class="tab-pane hidden"></div>
+    <div id="admin-sections" class="tab-pane hidden"></div>
+    <div id="admin-log" class="tab-pane hidden"></div>
+    <div id="admin-reports" class="tab-pane hidden"></div>
+    <div id="admin-stats" class="tab-pane hidden"></div>
+    <div id="admin-general-chat" class="tab-pane hidden"></div>
+    <div id="admin-settings" class="tab-pane hidden"></div>
+  </main>
+</section>
+
+<!-- ===================== لوحة المطور ===================== -->
+<section id="view-developer" class="dash hidden">
+  <aside class="sidebar">
+    <div class="sidebar-brand"><img src="/logo.png" alt="" class="sidebar-logo" onerror="this.style.display='none'"> رشد</div>
+    <div class="sidebar-user" id="developer-userbox"></div>
+    <nav>
+      <button class="nav-item active" data-tab="schools">🏠 المدارس</button>
+      <button class="nav-item" data-tab="overview">📊 نظرة شاملة</button>
+      <button class="nav-item" data-tab="accounts">👤 حسابات المطورين</button>
+      <button class="nav-item" data-tab="security">🔐 النسخ الاحتياطية</button>
+    </nav>
+    <div class="sidebar-bottom">
+      <button class="nav-item" data-tab="settings">⚙️ الإعدادات</button>
+      <button class="btn-logout" id="developer-logout">خروج</button>
+    </div>
+  </aside>
+  <main class="content">
+    <div id="developer-schools" class="tab-pane"></div>
+    <div id="developer-overview" class="tab-pane hidden"></div>
+    <div id="developer-accounts" class="tab-pane hidden"></div>
+    <div id="developer-security" class="tab-pane hidden"></div>
+    <div id="developer-settings" class="tab-pane hidden"></div>
+  </main>
+</section>
+
+<script src="/js/app.js"></script>
+</body>
+</html>
