@@ -12,6 +12,7 @@ const {
   findOrCreateSection,
   cleanupTypingIndicators,
 } = require('./db.js');
+const pgBackup = require('./pg_backup');
 
 const PORT = process.env.PORT || 3000;
 const PUBLIC_DIR = path.join(__dirname, 'public');
@@ -1228,6 +1229,10 @@ const server = http.createServer(async (req, res) => {
   }
 });
 
-server.listen(PORT, () => {
+server.listen(PORT, async () => {
   console.log(`✅ منصة "رشد" شغالة محلياً على: http://localhost:${PORT}`);
+  if (pgBackup.IS_PG) {
+    await pgBackup.restore(db.db);
+    pgBackup.startAutoBackup(db.db);
+  }
 });
