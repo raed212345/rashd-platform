@@ -1232,7 +1232,7 @@ const server = http.createServer(async (req, res) => {
 server.listen(PORT, async () => {
   console.log(`✅ منصة "رشد" شغالة محلياً على: http://localhost:${PORT}`);
   if (pgBackup.IS_PG) {
-    await pgBackup.restore(db.db);
-    pgBackup.startAutoBackup(db.db);
+    await pgBackup.restore(db);
+    pgBackup.startAutoBackup(db);
   }
 });
